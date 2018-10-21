@@ -1,6 +1,7 @@
 media/files/
 __pycache__/
-migrations/
+**/migrations
 *.sqlite3
 *.log
 *.temp
+.idea

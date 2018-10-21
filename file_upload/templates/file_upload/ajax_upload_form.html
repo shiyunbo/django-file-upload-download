@@ -5,9 +5,6 @@
 <h3>{{ heading }}</h3>
 {% endif %}
 
-<p> <a href="/file/upload1/">RegularFormUpload</a> | <a href="/file/upload2/">ModelFormUpload</a>
-    | <a href="/file/upload3/">AjaxUpload</a></p>
-
 <form action="" method="post" enctype="multipart/form-data" id="form">
     <ul class="errorlist"></ul>
     {% csrf_token %}

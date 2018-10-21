@@ -15,7 +15,8 @@
     </tr>
     {% for file in files %}
     <tr>
-        <td><a href="{{ file.file.url }}">{{ file.file.url }}</a></td>
+        <!-- Option 1 <td><a href="{{ file.file.url }}/">{{ file.file.url }}</a></td> -->
+        <td><a href="/file/download{{ file.file.url }}/">{{ file.file.url }}</a></td>
         <td>{{ file.file.size | filesizeformat }}</td>
         <td>{{ file.upload_method }}</td>
     </tr>
