@@ -1,0 +1,31 @@
+{% extends "file_upload/base.html" %}
+
+{% block content %}
+<h3>File List</h3>
+<p> <a href="/file/upload1/">RegularFormUpload</a> | <a href="/file/upload2/">ModelFormUpload</a>
+    | <a href="/file/upload3/">AjaxUpload</a></p>
+{% if files %}
+<table class="table table-striped">
+
+    <tbody>
+    <tr>
+        <td>Filename & URL</td>
+        <td>Filesize</td>
+        <td>Upload Method</td>
+    </tr>
+    {% for file in files %}
+    <tr>
+        <td><a href="{{ file.file.url }}">{{ file.file.url }}</a></td>
+        <td>{{ file.file.size | filesizeformat }}</td>
+        <td>{{ file.upload_method }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<p>No files uploaded yet. Please click <a href="{% url 'file_upload:file_upload' %}">here</a>
+    to upload files.</p>
+{% endif %}
+
+{% endblock %}

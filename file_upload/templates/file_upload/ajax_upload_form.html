@@ -1,0 +1,85 @@
+{% extends "file_upload/base.html" %}
+{% block content %}
+
+{% if heading %}
+<h3>{{ heading }}</h3>
+{% endif %}
+
+<p> <a href="/file/upload1/">RegularFormUpload</a> | <a href="/file/upload2/">ModelFormUpload</a>
+    | <a href="/file/upload3/">AjaxUpload</a></p>
+
+<form action="" method="post" enctype="multipart/form-data" id="form">
+    <ul class="errorlist"></ul>
+    {% csrf_token %}
+{{ form.as_p }}
+ <input type="button" class="btn btn-info form-control" value="submit" id="btn" />
+</form>
+<table class="table table-striped" id="result">
+</table>
+{% endblock %}
+
+
+{% block js %}
+<script src=" https://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.cookie.min.js "></script>
+<script>
+var csrftoken = $.cookie('csrftoken');
+function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$(document).ready(function(){
+   $('#btn').click(function(e){
+        e.preventDefault();
+        // 构建FormData对象
+        var form_data = new FormData();
+        form_data.append('file', $('#id_file')[0].files[0]);
+        form_data.append('upload_method', $('#id_upload_method').val());
+        $.ajax({
+        url: '/file/ajax_upload/',
+        data: form_data,
+        type: 'POST',
+        dataType: 'json',
+        // 告诉jQuery不要去处理发送的数据, 发送对象。
+        processData : false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType : false,
+        // 获取POST所需的csrftoken
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }},
+        success: function (data) {
+            if(data['error_msg']) {
+                var content = '<li>Only jpg, pdf and xlsx files are allowed.</li>';
+                $('ul.errorlist').html(content);
+            }
+            else
+            {
+            var content= '<thead><tr>' +
+            '<th>Name and URL</th>' +
+            '<th>Size</th>' +
+            '<th>Upload Method</th>' +
+            '</tr></thead><tbody>';
+
+             $.each(data, function(i, item) {
+                  content = content +
+                  '<tr><td>' +
+                  "<a href= ' " +
+                  item['url'] +
+                  " '> " +
+                  item['url'] +
+                  '</a></td><td>' +
+                  item['size'] +
+                  '</td><td>' +
+                  item['upload_method'] +
+                   '</td><tr>'
+                });
+             content = content + "</tbody>";
+             $('#result').html(content);
+             }
+           },
+        });
+   });
+ });
+  </script>
+{% endblock %}

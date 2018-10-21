@@ -1,0 +1,20 @@
+{% extends "file_upload/base.html" %}
+{% block content %}
+{% if heading %}
+<h3>{{ heading }}</h3>
+{% endif %}
+<p> <a href="/file/upload1/">RegularFormUpload</a> | <a href="/file/upload2/">ModelFormUpload</a>
+    | <a href="/file/upload3/">AjaxUpload</a></p>
+<form action="" method="post" enctype="multipart/form-data" >
+  {% csrf_token %}
+  {{ form.as_p }}
+ <button class="btn btn-info form-control " type="submit" value="submit">Upload</button>
+</form>
+
+<h3>Code</h3>
+<p>    re_path(r'^upload1/$', views.file_upload, name='file_upload'),
+</p>
+<p>     re_path(r'^upload2/$', views.model_form_upload, name='model_form_upload'),
+</p>
+
+{% endblock %}
